@@ -287,6 +287,18 @@ module Test = struct
         actual = expected
       );
 
+    "should be able to encode a request object for notification to json", (fun () ->
+        let expected_json = {|
+{"jsonrpc": "2.0", "params": [1,2,3], "method": "sum"}
+|}
+        in
+        let expected_json = from_string expected_json in
+        let request = Request.{id = None; _method = "sum"; params = Some (`List [`Int 1;`Int 2;`Int 3]) } in
+        (* sort key to compare with (=)  *)
+        let actual = Yojson.Basic.sort @@ Request.to_json request
+        and expected = Yojson.Basic.sort expected_json in
+        actual = expected
+      );
   ]
 
 end

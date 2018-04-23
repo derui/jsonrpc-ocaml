@@ -5,3 +5,4 @@
 module Types = Types
 module Errors = Errors
 module Client = Client
+module Client_intf = Client_intf

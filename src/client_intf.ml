@@ -24,8 +24,11 @@ module type Thread = sig
   val return: 'a -> 'a t
 end
 
+(** A module signature to call JSON-RPC. User can create RPC caller with this
+    module.
+*)
 module type Rpc = sig
   module Thread: Thread
 
-  val call_api: Request.t -> handler:'a response_handler -> unit Thread.t
+  val call_api: Request.t -> ?handler:'a response_handler -> unit Thread.t
 end
