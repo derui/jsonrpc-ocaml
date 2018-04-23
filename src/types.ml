@@ -231,3 +231,60 @@ let jsonrpc_of_json obj =
   | `Null -> Error Empty_json
   | `Assoc _ -> parse_obj obj
   | _ -> Error (Invalid_object obj)
+
+
+(**/**)
+(* ignore ocamldoc below *)
+
+module Test = struct
+
+  let tests = [
+    "should be able to parse response object from json", (fun () ->
+        let json = {|
+{"jsonrpc": "2.0", "result": 19, "id": "1"}
+|}
+        in
+        let expected = Response_success {id = 1L; result = `Int 19} in
+        jsonrpc_of_json (Yojson.Basic.from_string json) = Ok expected
+      );
+
+    "should be able to parse error response object from json", (fun () ->
+        let json = {|
+{"jsonrpc": "2.0", "error": {"code": -32700, "message": "error happenned"}, "id": "1"}
+|}
+        in
+        let expected = Response_error {
+            id = Some 1L;
+            error = {code = Error_code.Parse_error; message = "error happenned"; data = None}
+          } in
+        jsonrpc_of_json (Yojson.Basic.from_string json) = Ok expected
+      );
+
+    "should be able to parse error response object with data from json", (fun () ->
+        let json = {|
+{"jsonrpc": "2.0", "error": {"code": -32700, "message": "error happenned", "data": "detail"}, "id": "1"}
+|}
+        in
+        let expected = Response_error {
+            id = Some 1L;
+            error = {code = Error_code.Parse_error; message = "error happenned"; data = Some (`String "detail")}
+          } in
+        jsonrpc_of_json (Yojson.Basic.from_string json) = Ok expected
+      );
+
+    "should be able to encode request object to json", (fun () ->
+        let expected_json = {|
+{"jsonrpc": "2.0", "params": [1,2,3], "method": "sum", "id": "2"}
+|}
+        in
+        let expected_json = from_string expected_json in
+        let request = Request {id = 2L; _method = "sum"; params = Some (`List [`Int 1;`Int 2;`Int 3]) } in
+        (* sort key to compare with (=)  *)
+        let actual = Yojson.Basic.sort @@ jsonrpc_to_json request
+        and expected = Yojson.Basic.sort expected_json in
+        actual = expected
+      );
+
+  ]
+
+end

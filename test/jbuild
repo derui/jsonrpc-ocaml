@@ -1,0 +1,11 @@
+(jbuild_version 1)
+
+(alias
+ ((name    runtest)
+  (deps    (test_main.exe))
+  (action  (run ${<}))))
+
+(executable
+ ((name test_main)
+  (modules (test_main))
+  (libraries (jsonrpc-ocaml oUnit))))

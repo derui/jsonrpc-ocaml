@@ -16,5 +16,6 @@ depends: [
   "jbuilder" {build & >= "1.0+beta16"}
   "yojson" { >= "1.4.0" }
   "uuidm" { >= "0.9.6"}
+  "ounit" { test & >= "2.0.0" }
 ]
 available: ["ocaml" >= "4.05.0"]
