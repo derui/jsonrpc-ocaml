@@ -6,18 +6,18 @@ let make_request
     (type p) (type r)
     (module A: Api_def with type params = p and type result = r)
     (params: p option)
-    (handler : (r, error) result -> unit) =
+    (handler : (r, Error.t) result -> unit) =
   let params = A.params_to_json params in
   let handler' v =
-    let param = match v with
-      | Response_error e -> Error e.error
-      | Response_success v -> Ok (A.result_of_json v.result)
+    let param = match (v.Response.result, v.Response.error) with
+      | _, Some e -> Error e
+      | Some r, _ -> Ok (A.result_of_json r)
       | _ -> failwith "Unknown response"
     in
     handler param
   in
   let id = Random.int64 Int64.max_int in
-  let request = Request ({id; params; _method = A.name}) in
+  let request = Request.{id = Some id; params; _method = A.name} in
   (id, request, handler')
 
 (**/**)
@@ -40,7 +40,7 @@ module Test = struct
         end in
 
         let id, req, handler = make_request (module A) (Some [1;2;3]) ignore in
-        let expected = Request {id = id; params = Some (`List [`Int 1;`Int 2;`Int 3]); _method = "sum"} in
+        let expected = Request.{id = Some id; params = Some (`List [`Int 1;`Int 2;`Int 3]); _method = "sum"} in
         expected = req
     );
   ]

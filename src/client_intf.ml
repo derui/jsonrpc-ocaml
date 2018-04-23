@@ -27,5 +27,5 @@ end
 module type Rpc = sig
   module Thread: Thread
 
-  val call_api: jsonrpc -> handler:'a response_handler -> unit Thread.t
+  val call_api: Request.t -> handler:'a response_handler -> unit Thread.t
 end
