@@ -1,26 +1,31 @@
 open Types
 open Yojson.Basic
 
-(** The signature of method *)
-module type Method = sig
-  type param
+(** The signature to define interface of an API *)
+module type Api_def = sig
+  type params
   type result
 
   (** Return name of method *)
   val name: string
 
   (** convert parameter to json *)
-  val param_to_json: param option -> json option
+  val params_to_json: params option -> json option
 
   (** convert json to result when request success. *)
   val result_of_json: json -> result
 end
 
-module type RPC = sig
-  type param
-  type result
+(** A module signature for Threading such as Lwt. *)
+module type Thread = sig
+  type 'a t
 
-  val request_rpc: ?id:[`Use_random_gen | `Use_specific of int64] -> param option -> (int64 * jsonrpc)
+  val bind: 'a t -> ('a -> 'b t) -> 'b t
+  val return: 'a -> 'a t
+end
 
-  val response_of_rpc: id:int64 -> response:jsonrpc -> (result, error) Pervasives.result
+module type Rpc = sig
+  module Thread: Thread
+
+  val call_api: jsonrpc -> handler:'a response_handler -> unit Thread.t
 end
