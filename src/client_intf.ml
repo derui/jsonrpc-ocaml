@@ -29,5 +29,5 @@ end
 module type Rpc = sig
   module Thread: Thread
 
-  val call_api: Request.t -> ?handler:'a Types.response_handler -> unit Thread.t
+  val call_api: ?handler:(Response.t -> unit) -> Request.t -> unit Thread.t
 end
