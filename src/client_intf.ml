@@ -1,4 +1,3 @@
-open Types
 open Yojson.Basic
 
 (** The signature to define interface of an API *)
@@ -30,5 +29,5 @@ end
 module type Rpc = sig
   module Thread: Thread
 
-  val call_api: Request.t -> ?handler:'a response_handler -> unit Thread.t
+  val call_api: Request.t -> ?handler:'a Types.response_handler -> unit Thread.t
 end
