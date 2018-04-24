@@ -24,7 +24,7 @@ module Error : sig
     data : Yojson.Basic.json option;
   }
   val to_json : t -> [> `Assoc of (string * Yojson.Basic.json) list ]
-  val of_json : Yojson.Basic.json -> (t, Jsonrpc_ocaml__.Errors.t) result
+  val of_json : Yojson.Basic.json -> (t, Errors.t) result
 end
 
 type 'a response_handler = ('a, Error.t) result -> unit
@@ -37,7 +37,7 @@ module Request : sig
     id : id option;
   }
   val to_json : t -> Yojson.Basic.json
-  val of_json : Yojson.Basic.json -> (t, Jsonrpc_ocaml__.Errors.t) result
+  val of_json : Yojson.Basic.json -> (t, Errors.t) result
 end
 
 (** The module handle response object *)
@@ -52,7 +52,7 @@ module Response : sig
   val is_success : t -> bool
 
   val to_json : t -> Yojson.Basic.json
-  val of_json : Yojson.Basic.json -> (t, Jsonrpc_ocaml__.Errors.t) result
+  val of_json : Yojson.Basic.json -> (t, Errors.t) result
 end
 
 module Test : sig
