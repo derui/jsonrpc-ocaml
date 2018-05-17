@@ -1,6 +1,6 @@
-open Types
-open Errors
-open Yojson.Basic
+open Jsonrpc_ocaml.Types
+
+type json = Yojson.Basic.json
 
 (** The module for request object *)
 type t = {_method: string; params: json option; id: id option}
@@ -40,14 +40,16 @@ let to_json t =
 let of_json js =
   match js with
   | `Assoc assoc -> begin
+      let open Jsonrpc_ocaml.Types.Parse_error in
       if is_notification assoc || is_request assoc then
         let id = List.assoc_opt "id" assoc
         and _method = List.assoc_opt "method" assoc
         and params = List.assoc_opt "params" assoc in
+        let module U = Yojson.Basic.Util in
         match (id, _method) with
-        | (None, Some m) -> Ok ({_method = Util.to_string m;params; id = None})
-        | (Some id, Some m) -> Ok ({id = Some (Int64.of_string @@ Util.to_string id);
-                                    _method = Util.to_string m;
+        | (None, Some m) -> Ok ({_method = U.to_string m;params; id = None})
+        | (Some id, Some m) -> Ok ({id = Some (Int64.of_string @@ U.to_string id);
+                                    _method = U.to_string m;
                                     params})
         | _ -> Error Invalid_request
       else
@@ -66,7 +68,7 @@ module Test = struct
 {"jsonrpc": "2.0", "params": [1,2,3], "method": "sum", "id": "2"}
 |}
         in
-        let expected_json = from_string expected_json in
+        let expected_json = Yojson.Basic.from_string expected_json in
         let request = {id = Some 2L; _method = "sum"; params = Some (`List [`Int 1;`Int 2;`Int 3]) } in
         (* sort key to compare with (=)  *)
         let actual = Yojson.Basic.sort @@ to_json request
@@ -79,7 +81,7 @@ module Test = struct
 {"jsonrpc": "2.0", "params": [1,2,3], "method": "sum"}
 |}
         in
-        let expected_json = from_string expected_json in
+        let expected_json = Yojson.Basic.from_string expected_json in
         let request = {id = None; _method = "sum"; params = Some (`List [`Int 1;`Int 2;`Int 3]) } in
         (* sort key to compare with (=)  *)
         let actual = Yojson.Basic.sort @@ to_json request

@@ -1,33 +1,41 @@
-open Types
-include Client_intf
+module J = Jsonrpc_ocaml
+open J.Types
 
-(** Make a request and response handler that will use with response which has same id of the request it. *)
-let make_request
-    (type p) (type r)
-    (module A: Api_def with type params = p and type result = r)
-    (params: p option)
-    (handler : (r, Error.t) result -> unit) =
-  let params = A.params_to_json params in
-  let handler' v =
-    let param = match (v.Response.result, v.Response.error) with
-      | _, Some e -> Error e
-      | Some r, _ -> Ok (A.result_of_json r)
-      | _ -> failwith "Unknown response"
+module Core = struct
+  type json = Yojson.Basic.json
+  module Response = Response
+  module Request = Request
+
+  (** Make a request and response handler that will use with response which has same id of the request it. *)
+  let make_request
+      (type p) (type r)
+      (module A: J.Client_intf.Api_def with type params = p and type result = r and type json = json)
+      (params: p option)
+      (handler : (r, Error.t) result -> unit) =
+    let params = A.params_to_json params in
+    let handler' v =
+      let param = match (v.Response.result, v.Response.error) with
+        | _, Some e -> Error e
+        | Some r, _ -> Ok (A.result_of_json r)
+        | _ -> failwith "Unknown response"
+      in
+      handler param
     in
-    handler param
-  in
-  let id = Random.int64 Int64.max_int in
-  let request = Request.{id = Some id; params; _method = A.name} in
-  (request, Some handler')
+    let id = Random.int64 Int64.max_int in
+    let request = Request.{id = Some id; params; _method = A.name} in
+    (request, Some handler')
 
-(** Make a request for notification. *)
-let make_notification
-    (type p) (type r)
-    (module A: Api_def with type params = p and type result = r)
-    (params: p option) =
-  let params = A.params_to_json params in
-  let request = Request.{id = None; params; _method = A.name} in
-  (request, None)
+  (** Make a request for notification. *)
+  let make_notification
+      (type p) (type r)
+      (module A: J.Client_intf.Api_def with type params = p and type result = r and type json = json)
+      (params: p option) =
+    let params = A.params_to_json params in
+    let request = Request.{id = None; params; _method = A.name} in
+    (request, None)
+end
+
+include Core
 
 (**/**)
 (* ignore document below *)
@@ -36,6 +44,7 @@ module Test = struct
   let tests = [
     ("should be able to wrap a request with API definition", fun _ ->
         let module A = struct
+          type json = Yojson.Basic.json
           type params = int list
           type result = int
 
@@ -54,6 +63,7 @@ module Test = struct
     );
     ("should be able to wrap a notification with API definition", fun _ ->
         let module B = struct
+          type json = Yojson.Basic.json
           type params = int list
           type result = int
 

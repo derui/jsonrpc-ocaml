@@ -1,6 +1,8 @@
-open Types
-open Yojson.Basic
-open Errors
+open Jsonrpc_ocaml.Types
+
+type json = Yojson.Basic.json
+
+module Error = Error
 
 let jsonrpc_version = ("jsonrpc", `String "2.0")
 
@@ -51,7 +53,7 @@ let is_success t = match (t.result, t.error) with
   | Some _, None -> true
   | _, _ -> false
 
-let of_json js =
+let of_json  js =
   match js with
   | `Assoc assoc -> begin
       if is_response_success assoc || is_response_error assoc then
@@ -59,7 +61,7 @@ let of_json js =
         and error = List.assoc_opt "error" assoc
         and result = List.assoc_opt "result" assoc in
         let id = match id with
-          | Some id -> Some (Int64.of_string @@ Util.to_string id)
+          | Some id -> Some (Int64.of_string @@ Yojson.Basic.Util.to_string id)
           | None -> None
         in
         match error with
