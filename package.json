@@ -1,0 +1,25 @@
+{
+  "name": "jsonrpc-ocaml",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --colors _build/default/test/jsoo/test_jsoo.bc.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/derui/jsonrpc-ocaml.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/derui/jsonrpc-ocaml/issues"
+  },
+  "homepage": "https://github.com/derui/jsonrpc-ocaml#readme",
+  "devDependencies": {
+    "mocha": "^5.1.1"
+  }
+}

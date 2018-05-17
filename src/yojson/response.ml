@@ -45,14 +45,6 @@ let to_json t =
   `Assoc ([jsonrpc_version] @ id @ error @ result)
 
 (** Predicate to detect a object is error or not *)
-let is_error t = match (t.result, t.error) with
-  | None, Some _ -> true
-  | _, _ -> false
-
-let is_success t = match (t.result, t.error) with
-  | Some _, None -> true
-  | _, _ -> false
-
 let of_json  js =
   match js with
   | `Assoc assoc -> begin
