@@ -1,6 +1,6 @@
 
 opam-version: "2.0"
-version: "0.1.0"
+version: "0.2.0"
 maintainer: "derutakayu@gmail.com"
 authors: "derui"
 license: "MIT"
@@ -14,8 +14,10 @@ build: [
 ]
 depends: [
   "jbuilder" {build & >= "1.0+beta16"}
+  "js_of_ocaml" { >= "3.1.0" }
   "yojson" { >= "1.4.0" }
   "uuidm" { >= "0.9.6"}
   "ounit" { test & >= "2.0.0" }
+  "mocha_of_ocaml" {test & >= "0.2.0"}
 ]
 available: ["ocaml" >= "4.05.0"]
