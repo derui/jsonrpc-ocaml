@@ -10,7 +10,7 @@ end
 (** A module signature to call JSON-RPC. User can create RPC caller with this
     module.
 *)
-module type Rpc = sig
+module type S = sig
   module Thread: Thread
   module Response: Response_intf.S
   module Request: Request_intf.S
