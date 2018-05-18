@@ -1,6 +1,8 @@
 
 type json = < > Js.t
 
+module Error = Error
+
 type t = {
   result : json option;
   id : Jsonrpc_ocaml.Types.id option;
