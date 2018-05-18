@@ -1,6 +1,10 @@
 module J = Jsonrpc_ocaml
 open J.Types
 
+module type Api_def = sig
+  include Jsonrpc_ocaml.Client_intf.Api_def with type json = < > Js.t
+end
+
 module Core = struct
   type json = < > Js.t
   module Response = Response
@@ -9,7 +13,7 @@ module Core = struct
   (** Make a request and response handler that will use with response which has same id of the request it. *)
   let make_request
       (type p) (type r)
-      (module A: J.Client_intf.Api_def with type params = p and type result = r and type json = json)
+      (module A: Api_def with type params = p and type result = r)
       (params: p option)
       (handler : (r, Error.t) result -> unit) =
     let params = A.params_to_json params in
