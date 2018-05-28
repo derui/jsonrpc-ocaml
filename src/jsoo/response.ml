@@ -48,14 +48,11 @@ let to_json t =
 let of_json js =
   let js : Js_types.response Js.t = Js.Unsafe.coerce js in
   if is_response_success js || is_response_error js then
-    let keys = Js.object_keys js |> Js.to_array |> Array.to_list in
-    let obj = List.map (fun key -> (Js.to_string key, Js.Unsafe.get js key)) keys in
-
-    let id = List.assoc_opt "id" obj
-    and error = List.assoc_opt "error" obj
-    and result = List.assoc_opt "result" obj in
+    let id = Js.Optdef.map js##.id Js.to_string |> Js.Optdef.to_option
+    and error = Js.Optdef.to_option js##.error
+    and result = Js.Optdef.to_option js##.result in
     let id = match id with
-      | Some id -> Some (Int64.of_string @@ Js.to_string id)
+      | Some id -> Some (Int64.of_string id)
       | None -> None
     in
     match error with
