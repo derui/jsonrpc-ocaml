@@ -61,6 +61,7 @@ let of_json js =
 (* ignore ocamldoc below *)
 
 module Test = struct
+  open OUnit
 
   let tests = [
     "should be able to encode request object to json", (fun () ->
@@ -73,7 +74,7 @@ module Test = struct
         (* sort key to compare with (=)  *)
         let actual = Yojson.Basic.sort @@ to_json request
         and expected = Yojson.Basic.sort expected_json in
-        actual = expected
+        assert_equal actual expected
       );
 
     "should be able to encode a request object for notification to json", (fun () ->
@@ -86,7 +87,7 @@ module Test = struct
         (* sort key to compare with (=)  *)
         let actual = Yojson.Basic.sort @@ to_json request
         and expected = Yojson.Basic.sort expected_json in
-        actual = expected
+        assert_equal actual expected
       );
   ]
 

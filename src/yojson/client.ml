@@ -45,6 +45,7 @@ include Core
 (* ignore document below *)
 
 module Test = struct
+  open OUnit
   let tests = [
     ("should be able to wrap a request with API definition", fun _ ->
         let module A = struct
@@ -63,7 +64,7 @@ module Test = struct
 
         let req, handler = make_request (module A) (Some [1;2;3]) ignore in
         let expected = Request.{id = req.Request.id; params = Some (`List [`Int 1;`Int 2;`Int 3]); _method = "sum"} in
-        expected = req
+        assert_equal expected req
     );
     ("should be able to wrap a notification with API definition", fun _ ->
         let module B = struct
@@ -82,7 +83,7 @@ module Test = struct
 
         let req, _ = make_notification (module B) (Some [1;2;3]) in
         let expected = Request.{id = None; params = Some (`List [`Int 1;`Int 2;`Int 3]); _method = "sum"} in
-        expected = req
+        assert_equal expected req
     );
   ]
 end

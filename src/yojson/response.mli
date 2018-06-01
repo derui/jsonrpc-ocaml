@@ -11,5 +11,5 @@ val to_json : t -> json
 val of_json : json -> (t, json Jsonrpc_ocaml.Types.Parse_error.t) result
 
 module Test : sig
-  val tests : (string * (unit -> bool)) list
+  val tests : (string * (unit -> unit)) list
 end

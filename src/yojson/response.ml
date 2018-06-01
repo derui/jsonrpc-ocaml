@@ -72,6 +72,7 @@ let of_json  js =
 (* ignore ocamldoc below *)
 
 module Test = struct
+  open OUnit
 
   let tests = [
     "should be able to parse response object from json", (fun () ->
@@ -80,7 +81,7 @@ module Test = struct
 |}
         in
         let expected = {id = Some 1L; result = Some (`Int 19); error = None} in
-        of_json (Yojson.Basic.from_string json) = Ok expected
+        assert_equal (of_json @@ Yojson.Basic.from_string json) @@ Ok expected
       );
 
     "should be able to parse error response object from json", (fun () ->
@@ -93,7 +94,7 @@ module Test = struct
             result = None;
             error = Some Error.{code = Error_code.Parse_error; message = "error happenned"; data = None}
           } in
-        of_json (Yojson.Basic.from_string json) = Ok expected
+        assert_equal (of_json @@ Yojson.Basic.from_string json) @@ Ok expected
       );
 
     "should be able to parse error response object with data from json", (fun () ->
@@ -106,7 +107,7 @@ module Test = struct
             error = Some Error.{code = Error_code.Parse_error; message = "error happenned"; data = Some (`String "detail")};
             result = None;
           } in
-        of_json (Yojson.Basic.from_string json) = Ok expected
+        assert_equal (of_json @@ Yojson.Basic.from_string json) @@ Ok expected
       );
   ]
 
