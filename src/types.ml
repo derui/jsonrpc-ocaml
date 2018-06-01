@@ -26,6 +26,14 @@ module Error_code = struct
     | Invalid_params ->  -32602
     | Internal_error ->  -32603
     | Others v -> v
+
+  let to_message = function
+    | Parse_error -> "Parse error"
+    | Invalid_request -> "Invalid Request"
+    | Method_not_found -> "Method not found"
+    | Invalid_params -> "Invalid params"
+    | Internal_error -> "Internal error"
+    | Others _ -> "Server error"
 end
 
 module Parse_error = struct
@@ -39,3 +47,6 @@ module Parse_error = struct
     | Not_found_version
 
 end
+
+(** Common exception for JSON-RPC. *)
+exception Jsonrpc_error of Error_code.t
