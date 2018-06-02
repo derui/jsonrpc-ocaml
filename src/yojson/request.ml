@@ -12,7 +12,6 @@ let is_request assoc =
     has_version assoc
     && has_id assoc
     && has_method assoc
-    && has_params assoc
   )
 
 let is_notification assoc =
@@ -20,7 +19,6 @@ let is_notification assoc =
     has_version assoc
     && not @@ has_id assoc
     && has_method assoc
-    && has_params assoc
   )
 
 (* conversion function between json and OCaml *)
@@ -84,6 +82,18 @@ module Test = struct
         in
         let expected_json = Yojson.Basic.from_string expected_json in
         let request = {id = None; _method = "sum"; params = Some (`List [`Int 1;`Int 2;`Int 3]) } in
+        (* sort key to compare with (=)  *)
+        let actual = Yojson.Basic.sort @@ to_json request
+        and expected = Yojson.Basic.sort expected_json in
+        assert_equal actual expected
+      );
+    "should be able to handle object that omits params", (fun () ->
+        let expected_json = {|
+{"jsonrpc": "2.0", "method": "sum", "id": "2"}
+|}
+        in
+        let expected_json = Yojson.Basic.from_string expected_json in
+        let request = {id = Some 2L; _method = "sum"; params = None } in
         (* sort key to compare with (=)  *)
         let actual = Yojson.Basic.sort @@ to_json request
         and expected = Yojson.Basic.sort expected_json in
