@@ -5,7 +5,8 @@ module Core = struct
   type json = Yojson.Basic.json
   module Response = Response
   module Request = Request
-  type handler = Request.t -> Response.t option
+  module Thread = Lwt
+  type handler = Request.t -> Response.t Lwt.t
   type _method = string
   type t = {
     procedure_table: (_method, handler) Hashtbl.t
@@ -34,42 +35,3 @@ module Core = struct
 end
 
 include Core
-
-(**/**)
-(* ignore document below *)
-
-module Test = struct
-  open OUnit
-  let tests = [
-    ("should be able to expose method with handler", fun _ ->
-        let server = Core.make () in
-        let server = Core.expose server ~_method:"test"
-            ~handler:(fun _ -> Some Response.{result = None;
-                                         id = None;
-                                         error = None})
-        in
-        let expected = Some Response.{result = None; id = None; error = None} in
-        let actual = handle_request server ~request:Request.{
-            _method = "test";
-            params = None;
-            id = None;
-          }
-        in
-        assert_equal expected actual
-    );
-    ("should raise error if call method that does not expose", fun _ ->
-        let server = Core.make () in
-        let server = Core.expose server ~_method:"test"
-            ~handler:(fun _ -> Some Response.{result = None;
-                                              id = None;
-                                              error = None})
-        in
-        assert_raises (Jsonrpc_error Error_code.Method_not_found) (fun _ ->
-          handle_request server ~request:Request.{
-            _method = "foo";
-            params = None;
-            id = None;
-          })
-    );
-  ]
-end

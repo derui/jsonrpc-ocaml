@@ -12,7 +12,7 @@ let () =
     ) Jsonrpc_ocaml_yojson.Request.Test.tests
   and server_specs = List.map (fun (desc, spec) ->
       desc >:: (fun _ -> spec ())
-    ) Jsonrpc_ocaml_yojson.Server.Test.tests
+    ) Yojson_server_test.tests
   in
   let suite =
     "JSON RPC for OCaml" >::: (response_specs @ client_specs @ request_specs @ server_specs)

@@ -1,3 +1,11 @@
+(** A module signature for Threading such as Lwt. *)
+module type Thread = sig
+  type 'a t
+
+  val bind: 'a t -> ('a -> 'b t) -> 'b t
+  val return: 'a -> 'a t
+end
+
 (** A module signature to create procedure for JSON-RPC. Using this module combines with a module implemented
     Rpc module interface. *)
 module type S = sig
@@ -5,7 +13,8 @@ module type S = sig
   type json
   module Response: Response_intf.S with type json = json
   module Request: Request_intf.S with type json = json
-  type handler = Request.t -> Response.t option
+  module Thread: Thread
+  type handler = Request.t -> Response.t Thread.t
   type _method = string
 
   (** Make a server instance. *)
@@ -24,5 +33,5 @@ module type S = sig
       This function will raise [jsonrpc_error] if can not handle request,
       not found method, or something else.
   *)
-  val handle_request: request:Request.t -> t -> Response.t option
+  val handle_request: request:Request.t -> t -> Response.t Thread.t
 end

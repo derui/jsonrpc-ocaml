@@ -7,5 +7,5 @@
 
 (executable
  ((name test_main)
-  (modules (test_main))
-  (libraries (jsonrpc-ocaml jsonrpc-ocaml.yojson oUnit))))
+  (modules (test_main yojson_server_test))
+  (libraries (jsonrpc-ocaml jsonrpc-ocaml.yojson lwt lwt.unix oUnit))))
