@@ -16,7 +16,7 @@ depends: [
   "jbuilder" {build & >= "1.0+beta16"}
   "js_of_ocaml" { >= "3.1.0" }
   "yojson" { >= "1.4.0" }
-  "uuidm" { >= "0.9.6"}
+  "lwt" {< "4.0.0"}
   "ounit" { test & >= "2.0.0" }
   "mocha_of_ocaml" {test & >= "0.2.0"}
 ]
