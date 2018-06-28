@@ -1,5 +1,5 @@
 
-type json = Yojson.Basic.json
+type json = Yojson.Safe.json
 
 (** The module handle request object *)
 type t = {

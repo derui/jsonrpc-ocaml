@@ -1,6 +1,6 @@
 open Jsonrpc_ocaml.Types
 
-type json = Yojson.Basic.json
+type json = Yojson.Safe.json
 
 (** The module for request object *)
 type t = {_method: string; params: json option; id: id option}
@@ -43,7 +43,7 @@ let of_json js =
         let id = List.assoc_opt "id" assoc
         and _method = List.assoc_opt "method" assoc
         and params = List.assoc_opt "params" assoc in
-        let module U = Yojson.Basic.Util in
+        let module U = Yojson.Safe.Util in
         match (id, _method) with
         | (None, Some m) -> Ok ({_method = U.to_string m;params; id = None})
         | (Some id, Some m) -> Ok ({id = Some (Int64.of_string @@ U.to_string id);
@@ -67,11 +67,11 @@ module Test = struct
 {"jsonrpc": "2.0", "params": [1,2,3], "method": "sum", "id": "2"}
 |}
         in
-        let expected_json = Yojson.Basic.from_string expected_json in
+        let expected_json = Yojson.Safe.from_string expected_json in
         let request = {id = Some 2L; _method = "sum"; params = Some (`List [`Int 1;`Int 2;`Int 3]) } in
         (* sort key to compare with (=)  *)
-        let actual = Yojson.Basic.sort @@ to_json request
-        and expected = Yojson.Basic.sort expected_json in
+        let actual = Yojson.Safe.sort @@ to_json request
+        and expected = Yojson.Safe.sort expected_json in
         assert_equal actual expected
       );
 
@@ -80,11 +80,11 @@ module Test = struct
 {"jsonrpc": "2.0", "params": [1,2,3], "method": "sum"}
 |}
         in
-        let expected_json = Yojson.Basic.from_string expected_json in
+        let expected_json = Yojson.Safe.from_string expected_json in
         let request = {id = None; _method = "sum"; params = Some (`List [`Int 1;`Int 2;`Int 3]) } in
         (* sort key to compare with (=)  *)
-        let actual = Yojson.Basic.sort @@ to_json request
-        and expected = Yojson.Basic.sort expected_json in
+        let actual = Yojson.Safe.sort @@ to_json request
+        and expected = Yojson.Safe.sort expected_json in
         assert_equal actual expected
       );
     "should be able to handle object that omits params", (fun () ->
@@ -92,11 +92,11 @@ module Test = struct
 {"jsonrpc": "2.0", "method": "sum", "id": "2"}
 |}
         in
-        let expected_json = Yojson.Basic.from_string expected_json in
+        let expected_json = Yojson.Safe.from_string expected_json in
         let request = {id = Some 2L; _method = "sum"; params = None } in
         (* sort key to compare with (=)  *)
-        let actual = Yojson.Basic.sort @@ to_json request
-        and expected = Yojson.Basic.sort expected_json in
+        let actual = Yojson.Safe.sort @@ to_json request
+        and expected = Yojson.Safe.sort expected_json in
         assert_equal actual expected
       );
   ]

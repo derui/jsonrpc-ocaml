@@ -1,8 +1,8 @@
 module J = Jsonrpc_ocaml
-module B = Yojson.Basic
+module B = Yojson.Safe
 
 (** The type of error object *)
-type json = Yojson.Basic.json
+type json = Yojson.Safe.json
 type t = {
   code: J.Types.Error_code.t;
   message: string;

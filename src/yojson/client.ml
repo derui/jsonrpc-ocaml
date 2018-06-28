@@ -2,11 +2,11 @@ module J = Jsonrpc_ocaml
 open J.Types
 
 module type Api_def = sig
-  include Jsonrpc_ocaml.Client_intf.Api_def with type json = Yojson.Basic.json
+  include Jsonrpc_ocaml.Client_intf.Api_def with type json = Yojson.Safe.json
 end
 
 module Core = struct
-  type json = Yojson.Basic.json
+  type json = Yojson.Safe.json
   module Response = Response
   module Request = Request
 
@@ -49,7 +49,7 @@ module Test = struct
   let tests = [
     ("should be able to wrap a request with API definition", fun _ ->
         let module A = struct
-          type json = Yojson.Basic.json
+          type json = Yojson.Safe.json
           type params = int list
           type result = int
 
@@ -68,7 +68,7 @@ module Test = struct
     );
     ("should be able to wrap a notification with API definition", fun _ ->
         let module B = struct
-          type json = Yojson.Basic.json
+          type json = Yojson.Safe.json
           type params = int list
           type result = int
 

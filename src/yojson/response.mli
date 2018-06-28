@@ -1,5 +1,5 @@
 
-type json = Yojson.Basic.json
+type json = Yojson.Safe.json
 
 type t = {
   result : json option;

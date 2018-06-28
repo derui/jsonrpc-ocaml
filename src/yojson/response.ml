@@ -1,6 +1,6 @@
 open Jsonrpc_ocaml.Types
 
-type json = Yojson.Basic.json
+type json = Yojson.Safe.json
 
 module Error = Error
 
@@ -53,7 +53,7 @@ let of_json  js =
         and error = List.assoc_opt "error" assoc
         and result = List.assoc_opt "result" assoc in
         let id = match id with
-          | Some id -> Some (Int64.of_string @@ Yojson.Basic.Util.to_string id)
+          | Some id -> Some (Int64.of_string @@ Yojson.Safe.Util.to_string id)
           | None -> None
         in
         match error with
@@ -81,7 +81,7 @@ module Test = struct
 |}
         in
         let expected = {id = Some 1L; result = Some (`Int 19); error = None} in
-        assert_equal (of_json @@ Yojson.Basic.from_string json) @@ Ok expected
+        assert_equal (of_json @@ Yojson.Safe.from_string json) @@ Ok expected
       );
 
     "should be able to parse error response object from json", (fun () ->
@@ -94,7 +94,7 @@ module Test = struct
             result = None;
             error = Some Error.{code = Error_code.Parse_error; message = "error happenned"; data = None}
           } in
-        assert_equal (of_json @@ Yojson.Basic.from_string json) @@ Ok expected
+        assert_equal (of_json @@ Yojson.Safe.from_string json) @@ Ok expected
       );
 
     "should be able to parse error response object with data from json", (fun () ->
@@ -107,7 +107,7 @@ module Test = struct
             error = Some Error.{code = Error_code.Parse_error; message = "error happenned"; data = Some (`String "detail")};
             result = None;
           } in
-        assert_equal (of_json @@ Yojson.Basic.from_string json) @@ Ok expected
+        assert_equal (of_json @@ Yojson.Safe.from_string json) @@ Ok expected
       );
   ]
 
