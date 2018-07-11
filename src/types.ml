@@ -47,6 +47,3 @@ module Parse_error = struct
     | Not_found_version
 
 end
-
-(** Common exception for JSON-RPC. *)
-exception Jsonrpc_error of Error_code.t

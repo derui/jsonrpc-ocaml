@@ -6,7 +6,6 @@ module type S = sig
 
   type t = {
     code: Error_code.t;
-    message: string;
     data: json option;
   }
 
