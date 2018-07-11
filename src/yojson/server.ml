@@ -1,10 +1,6 @@
 module J = Jsonrpc_ocaml
 open J.Types
 
-module E = J.Exception.Make(struct
-    type t = Yojson.Safe.json
-  end)
-
 (** Convert exception to jsonrpc-defined error response *)
 let handle_error request data code =
   Response.{
@@ -41,10 +37,10 @@ module Core = struct
   let handle_request ~request t =
     Lwt.catch (fun () ->
         match Hashtbl.find_opt t.procedure_table request.Request._method with
-        | None -> E.raise_error Error_code.Method_not_found
+        | None -> Exception.raise_error Error_code.Method_not_found
         | Some handler -> handler request
       )
-      (function | E.Jsonrpc_error (code, data) -> Lwt.return @@ handle_error request data code
+      (function | Exception.Jsonrpc_error (code, data) -> Lwt.return @@ handle_error request data code
                 | _ as e -> raise e)
 end
 
