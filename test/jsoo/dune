@@ -1,0 +1,10 @@
+(alias
+ (name runtest)
+ (deps test_jsoo.bc.js)
+ (action (run npm run test)))
+
+(executable
+ (name test_jsoo)
+ (modules test_jsoo)
+ (libraries jsonrpc-ocaml.jsoo mocha_of_ocaml)
+ (js_of_ocaml))

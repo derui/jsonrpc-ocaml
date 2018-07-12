@@ -1,5 +1,4 @@
 module J = Jsonrpc_ocaml
-open J.Types
 
 module type Api_def = sig
   include Jsonrpc_ocaml.Client_intf.Api_def with type json = < > Js.t
@@ -62,7 +61,7 @@ module Test = struct
             | _ -> 100
         end in
 
-        let req, handler = make_request (module A) (Some [1;2;3]) ignore in
+        let req, _ = make_request (module A) (Some [1;2;3]) ignore in
         let expected = Request.{
             id = req.Request.id;
             params = Some Js.(Unsafe.coerce @@ Js.array [|1;2;3|]);

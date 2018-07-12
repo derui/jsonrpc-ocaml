@@ -1,0 +1,4 @@
+(library
+ (name jsonrpc_ocaml_yojson)
+ (public_name jsonrpc-ocaml.yojson)
+ (libraries jsonrpc-ocaml yojson lwt oUnit))

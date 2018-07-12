@@ -1,7 +1,0 @@
-(jbuild_version 1)
-
-(library
- ((name jsonrpc_ocaml_jsoo)
-  (public_name jsonrpc-ocaml.jsoo)
-  (libraries (jsonrpc-ocaml js_of_ocaml mocha_of_ocaml))
-  (preprocess (pps (js_of_ocaml-ppx)))))

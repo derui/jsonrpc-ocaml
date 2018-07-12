@@ -38,9 +38,9 @@ end
 
 module Parse_error = struct
   type 'a t =
-    (** The exception thrown when toplevel json is null. *)
+    (* The exception thrown when toplevel json is null. *)
       Empty_json
-    (** Invalid object on parse *)
+    (* Invalid object on parse *)
     | Invalid_object of 'a
     | Invalid_request
     | Invalid_response

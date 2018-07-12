@@ -1,5 +1,4 @@
 module J = Jsonrpc_ocaml
-open J.Types
 
 module type Api_def = sig
   include Jsonrpc_ocaml.Client_intf.Api_def with type json = Yojson.Safe.json
@@ -62,7 +61,7 @@ module Test = struct
             | _ -> failwith ""
         end in
 
-        let req, handler = make_request (module A) (Some [1;2;3]) ignore in
+        let req, _ = make_request (module A) (Some [1;2;3]) ignore in
         let expected = Request.{id = req.Request.id; params = Some (`List [`Int 1;`Int 2;`Int 3]); _method = "sum"} in
         assert_equal expected req
     );
