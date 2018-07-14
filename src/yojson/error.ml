@@ -22,10 +22,11 @@ let to_json error =
 let of_json = function
   | `Assoc assoc -> begin
       let code = List.assoc "code" assoc |> B.Util.to_int
+      and message = List.assoc "message" assoc |> B.Util.to_string
       and data = List.assoc_opt "data" assoc in
 
       let module T = Jsonrpc_ocaml.Types in
-      let code = T.Error_code.of_int code in
+      let code = T.Error_code.make ~message code in
       Ok ({code;data})
     end
   | _ as js -> Error (J.Types.Parse_error.Invalid_object js)

@@ -7,6 +7,12 @@ type t = {
   data: json option;
 }
 
+class type js = object
+  method code: int Js.readonly_prop
+  method message: Js.js_string Js.t Js.readonly_prop
+  method data: json Js.optdef Js.readonly_prop
+end
+
 let to_json error =
   let module T = Jsonrpc_ocaml.Types in
   let code = ("code", Js.Unsafe.inject (T.Error_code.to_int error.code)) in
@@ -18,10 +24,9 @@ let to_json error =
   Js.Unsafe.obj @@ Array.concat [[|code; message|];data]
 
 let of_json js =
-  let keys = Js.object_keys js |> Js.to_array |> Array.to_list in
-  let obj = List.map (fun key -> (Js.to_string key, Js.Unsafe.get js key)) keys in
+  let js : js Js.t = Js.Unsafe.coerce js in
   let module T = Jsonrpc_ocaml.Types in
-  let code = List.assoc "code" obj |> T.Error_code.of_int
-  and data = List.assoc_opt "data" obj in
+  let code = T.Error_code.make ~message:Js.(to_string js##.message) js##.code
+  and data = Js.Optdef.to_option js##.data in
 
   Ok ({code;data;})

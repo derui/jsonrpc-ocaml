@@ -9,23 +9,26 @@ module Error_code = struct
     | Method_not_found
     | Invalid_params
     | Internal_error
-    | Others of int
+    | Server_error of int
+    | Application_error of string * int
 
-  let of_int = function
+  let make ~message = function
     | -32700 -> Parse_error
     | -32600 -> Invalid_request
     | -32601 -> Method_not_found
     | -32602 -> Invalid_params
     | -32603 -> Internal_error
-    | _ as v -> Others v
+    | _ as v when -32000 <= v && v <= -32099 -> Server_error v
+    | _ as v -> Application_error (message, v)
 
   let to_int = function
-    | Parse_error ->  -32700
-    | Invalid_request ->  -32600
-    | Method_not_found ->  -32601
-    | Invalid_params ->  -32602
-    | Internal_error ->  -32603
-    | Others v -> v
+    | Parse_error -> -32700
+    | Invalid_request -> -32600
+    | Method_not_found -> -32601
+    | Invalid_params -> -32602
+    | Internal_error -> -32603
+    | Server_error v -> v
+    | Application_error (_, v) -> v
 
   let to_message = function
     | Parse_error -> "Parse error"
@@ -33,7 +36,8 @@ module Error_code = struct
     | Method_not_found -> "Method not found"
     | Invalid_params -> "Invalid params"
     | Internal_error -> "Internal error"
-    | Others _ -> "Server error"
+    | Server_error _ -> "Server error"
+    | Application_error (v, _) -> v
 end
 
 module Parse_error = struct
