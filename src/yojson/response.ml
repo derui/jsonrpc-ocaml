@@ -12,6 +12,12 @@ type t = {
   error: Error.t option;
 }
 
+let empty = {
+  result = None;
+  id = None;
+  error = None;
+}
+
 let is_response_success assoc =
   Predicates.(
     has_version assoc

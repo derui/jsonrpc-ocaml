@@ -12,6 +12,9 @@ module type S = sig
     error : Error.t option;
   }
 
+  (** [empty] returns empty response that all element are none of.  *)
+  val empty : t
+
   val to_json : t -> json
   val of_json : json -> (t, json Types.Parse_error.t) result
 
