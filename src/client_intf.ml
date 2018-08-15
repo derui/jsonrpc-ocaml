@@ -25,12 +25,12 @@ module type S = sig
   val make_request:
     (module Api_def with type params = 'p and type result = 'r and type json = json)
     -> 'p option
-    -> (('r, Response.Error.t) result -> unit)
-    -> Request.t * (('r, Response.Error.t) result option)
+    -> (('r option, Response.Error.t) result -> unit)
+    -> Request.t * (('r option, Response.Error.t) result option)
 
   (** Make a notification for API *)
   val make_notification:
     (module Api_def with type params = 'p and type result = 'r)
     -> 'p option
-    -> Request.t * (('r, Response.Error.t) result option)
+    -> Request.t * (('r option, Response.Error.t) result option)
 end

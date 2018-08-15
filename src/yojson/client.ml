@@ -14,13 +14,13 @@ module Core = struct
       (type p) (type r)
       (module A: Api_def with type params = p and type result = r)
       (params: p option)
-      (handler : (r, Error.t) result -> unit) =
+      (handler : (r option, Error.t) result -> unit) =
     let params = A.params_to_json params in
     let handler' v =
       let param = match (v.Response.result, v.Response.error) with
         | _, Some e -> Error e
-        | Some r, _ -> Ok (A.result_of_json r)
-        | _ -> failwith "Unknown response"
+        | Some r, _ -> Ok (Some (A.result_of_json r))
+        | None, _ -> Ok None
       in
       handler param
     in
