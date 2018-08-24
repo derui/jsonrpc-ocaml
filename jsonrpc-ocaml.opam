@@ -16,7 +16,7 @@ depends: [
   "dune" {build & >= "1.0.0"}
   "js_of_ocaml" { >= "3.1.0" }
   "yojson" { >= "1.4.0" }
-  "lwt" {< "4.0.0"}
+  "lwt"{>= "3.1.0"}
   "ounit" { test & >= "2.0.0" }
   "mocha_of_ocaml" {>= "0.2.0"}
 ]
