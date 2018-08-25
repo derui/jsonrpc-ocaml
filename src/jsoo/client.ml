@@ -4,6 +4,10 @@ module type Api_def = sig
   include Jsonrpc_ocaml.Client_intf.Api_def with type json = < > Js.t
 end
 
+module type S = J.Client_intf.S with type json = < > Js.t
+                                 and module Response = Response
+                                 and module Request = Request
+
 module Core = struct
   type json = < > Js.t
   module Response = Response
