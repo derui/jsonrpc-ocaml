@@ -14,15 +14,15 @@ module type S = sig
   *)
   exception Jsonrpc_error of Types.Error_code.t * json option
 
+  val raise_error : ?data:json -> Types.Error_code.t -> 'a
   (** [raise_error ?data error_code] raises exception with code and data.
 
       @raise Jsonrpc_error always raises.
   *)
-  val raise_error: ?data:json -> Types.Error_code.t -> 'a
 end
 
 (** Make the module for exception. *)
-module Make(T:Type) : S with type json = T.t = struct
+module Make (T : Type) : S with type json = T.t = struct
   type json = T.t
 
   exception Jsonrpc_error of Types.Error_code.t * json option

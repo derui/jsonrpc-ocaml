@@ -1,4 +1,3 @@
-
 type id = int64
 
 (** Type type of error code defined by specification of JSON RPC *)
@@ -42,12 +41,11 @@ end
 
 module Parse_error = struct
   type 'a t =
-    (* The exception thrown when toplevel json is null. *)
-      Empty_json
+    | (* The exception thrown when toplevel json is null. *)
+        Empty_json
     (* Invalid object on parse *)
     | Invalid_object of 'a
     | Invalid_request
     | Invalid_response
     | Not_found_version
-
 end

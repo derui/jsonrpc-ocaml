@@ -1,9 +1,11 @@
 open Js_types
+
 let has_error_code js = Js.Optdef.test js##.code
 
 let has_error_message js = Js.Optdef.test js##.message
 
-let is_error : error Js.t -> bool = fun js -> has_error_code js && has_error_message js
+let is_error : error Js.t -> bool =
+ fun js -> has_error_code js && has_error_message js
 
 let has_version js =
   let js : jsonrpc_version Js.t = Js.Unsafe.coerce js in
@@ -26,10 +28,9 @@ let has_method js =
 let has_error js =
   let js : response Js.t = Js.Unsafe.coerce js in
   if Js.Optdef.test js##.error then
-    let is_error = Js.Optdef.map js##.error is_error  |> Js.Optdef.to_option in
+    let is_error = Js.Optdef.map js##.error is_error |> Js.Optdef.to_option in
     is_error = Some true
-  else
-    false
+  else false
 
 let has_result js =
   let js : response Js.t = Js.Unsafe.coerce js in

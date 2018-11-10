@@ -30,22 +30,22 @@ module type S = sig
   module Error : Error.S with type json = json
 
   val call :
-    api:(module
-          Api_def
-          with type params = 'p and type result = 'r and type json = json)
+       api:(module
+            Api_def
+              with type params = 'p and type result = 'r and type json = json)
     -> ?params:'p
     -> unit
     -> ('r option, Error.t) result Thread.t
   (** Make a request for API *)
 
   val notify :
-    api:(module
-          Api_def
-          with type params = 'p and type result = 'r and type json = json)
+       api:(module
+            Api_def
+              with type params = 'p and type result = 'r and type json = json)
     -> ?params:'p
     -> unit
     -> unit Thread.t
-    (** Make a notification for API *)
+  (** Make a notification for API *)
 end
 
 module Make (T : Json_type) (R : Rpc.S with type json = T.t) :
@@ -57,7 +57,7 @@ module Make (T : Json_type) (R : Rpc.S with type json = T.t) :
   (** Make a request and response handler that will use with response which has same id of the request it. *)
   let call (type p r)
       ~api:(module A : Api_def
-             with type params = p and type result = r and type json = json)
+        with type params = p and type result = r and type json = json)
       ?(params : p option) () =
     let params =
       match params with
@@ -80,7 +80,7 @@ module Make (T : Json_type) (R : Rpc.S with type json = T.t) :
   (** Make a request for notification. *)
   let notify (type p r)
       ~api:(module A : Api_def
-             with type params = p and type result = r and type json = json)
+        with type params = p and type result = r and type json = json)
       ?(params : p option) () =
     let params =
       match params with

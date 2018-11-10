@@ -6,7 +6,7 @@ module type S = sig
 
   (** The module handle response object *)
   type t = {result: json option; id: Types.id option; error: Error.t option}
-      s
+
   val empty : t
   (** [empty] returns empty response that all element are none of.  *)
 

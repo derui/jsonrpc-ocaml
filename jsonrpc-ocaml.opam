@@ -19,6 +19,6 @@ depends: [
   "lwt"{>= "4.0.0"}
   "alcotest" { test & >= "0.8.4" }
   "alcotest-lwt" { test & >= "0.8.0" }
-  "mocha_of_ocaml" {>= "0.2.0"}
+  "mocha_of_ocaml" {test & >= "0.2.0"}
 ]
 available: ["ocaml" >= "4.05.0"]

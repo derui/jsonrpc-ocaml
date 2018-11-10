@@ -43,9 +43,9 @@ let of_json js =
     match (id, _method) with
     | None, Some m -> Ok {_method= Js.to_string m; params; id= None}
     | Some id, Some m ->
-      Ok
-        { id= Some (Int64.of_string @@ Js.to_string id)
-        ; _method= Js.to_string m
-        ; params }
+        Ok
+          { id= Some (Int64.of_string @@ Js.to_string id)
+          ; _method= Js.to_string m
+          ; params }
     | _ -> Error Invalid_request
   else Error Invalid_request
