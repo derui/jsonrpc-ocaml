@@ -5,6 +5,6 @@
 
 (executable
  (name test_jsoo)
- (modules test_jsoo)
- (libraries jsonrpc-ocaml.jsoo mocha_of_ocaml)
- (js_of_ocaml))
+ (libraries jsonrpc-ocaml.jsoo mocha_of_ocaml.async js_of_ocaml-lwt lwt)
+ (js_of_ocaml)
+ (preprocess (pps js_of_ocaml.ppx lwt_ppx)))

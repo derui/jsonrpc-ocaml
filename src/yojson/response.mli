@@ -1,5 +1,6 @@
-
-include Jsonrpc_ocaml.Response_intf.S with type json = Yojson.Safe.json
+include
+  Jsonrpc_ocaml.Response.S
+  with type json = Yojson.Safe.json
   with module Error = Error
 
 module Test : sig
