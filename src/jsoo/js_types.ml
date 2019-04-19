@@ -1,3 +1,5 @@
+module Js = Js_of_ocaml.Js
+
 class type jsonrpc_version =
   object
     method jsonrpc : Js.js_string Js.t Js.readonly_prop

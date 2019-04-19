@@ -1,3 +1,5 @@
+module Js = Js_of_ocaml.Js
+
 (** Specialized module interface with Js_of_ocaml  *)
 module type S =
   Jsonrpc_ocaml.Rpc.S

@@ -1,4 +1,5 @@
 open Js_types
+module Js = Js_of_ocaml.Js
 
 let has_error_code js = Js.Optdef.test js##.code
 

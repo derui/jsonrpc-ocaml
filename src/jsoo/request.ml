@@ -1,3 +1,4 @@
+module Js = Js_of_ocaml.Js
 open Jsonrpc_ocaml.Types
 include Jsonrpc_ocaml.Request
 
@@ -22,14 +23,18 @@ let is_notification assoc =
 let to_json t =
   let id' =
     match t.id with
-    | Some id -> [("id", Js.(Unsafe.inject @@ string (Int64.to_string id)))]
-    | None -> []
+    | Some id ->
+        [("id", Js.(Unsafe.inject @@ string (Int64.to_string id)))]
+    | None ->
+        []
   in
   let _method' = ("method", Js.(Unsafe.inject @@ string t._method)) in
   let param' =
     match t.params with
-    | Some params -> [("params", Js.Unsafe.inject params)]
-    | None -> []
+    | Some params ->
+        [("params", Js.Unsafe.inject params)]
+    | None ->
+        []
   in
   Js.Unsafe.obj (Array.of_list ([jsonrpc_version; _method'] @ id' @ param'))
 
@@ -41,11 +46,13 @@ let of_json js =
     and _method = Js.Optdef.to_option js##._method
     and params = Js.Optdef.to_option js##.params in
     match (id, _method) with
-    | None, Some m -> Ok {_method= Js.to_string m; params; id= None}
+    | None, Some m ->
+        Ok {_method= Js.to_string m; params; id= None}
     | Some id, Some m ->
         Ok
           { id= Some (Int64.of_string @@ Js.to_string id)
           ; _method= Js.to_string m
           ; params }
-    | _ -> Error Invalid_request
+    | _ ->
+        Error Invalid_request
   else Error Invalid_request

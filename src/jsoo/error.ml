@@ -1,4 +1,5 @@
 module J = Jsonrpc_ocaml
+module Js = Js_of_ocaml.Js
 
 (** The type of error object *)
 type json = < > Js.t
@@ -23,8 +24,10 @@ let to_json error =
   in
   let data =
     match error.data with
-    | Some data -> [|("data", Js.Unsafe.inject data)|]
-    | None -> [||]
+    | Some data ->
+        [|("data", Js.Unsafe.inject data)|]
+    | None ->
+        [||]
   in
   Js.Unsafe.obj @@ Array.concat [[|code; message|]; data]
 

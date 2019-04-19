@@ -1,3 +1,4 @@
+module Js = Js_of_ocaml.Js
 open Jsonrpc_ocaml.Types
 
 type json = < > Js.t
@@ -24,18 +25,24 @@ let is_response_error assoc =
 let to_json t =
   let id =
     match t.id with
-    | None -> []
-    | Some id -> [("id", Js.Unsafe.inject @@ Js.string (Int64.to_string id))]
+    | None ->
+        []
+    | Some id ->
+        [("id", Js.Unsafe.inject @@ Js.string (Int64.to_string id))]
   in
   let error =
     match t.error with
-    | None -> []
-    | Some error -> [("error", Js.Unsafe.inject @@ Error.to_json error)]
+    | None ->
+        []
+    | Some error ->
+        [("error", Js.Unsafe.inject @@ Error.to_json error)]
   in
   let result =
     match t.result with
-    | None -> []
-    | Some result -> [("result", Js.Unsafe.inject result)]
+    | None ->
+        []
+    | Some result ->
+        [("result", Js.Unsafe.inject result)]
   in
   Js.Unsafe.obj (Array.of_list ([jsonrpc_version] @ id @ error @ result))
 
@@ -52,7 +59,10 @@ let of_json js =
     match error with
     | Some error -> (
       match Error.of_json error with
-      | Ok error -> Ok {error= Some error; id; result}
-      | Error _ as e -> e )
-    | None -> Ok {error= None; id; result}
+      | Ok error ->
+          Ok {error= Some error; id; result}
+      | Error _ as e ->
+          e )
+    | None ->
+        Ok {error= None; id; result}
   else Error Jsonrpc_ocaml.Types.Parse_error.Invalid_response
