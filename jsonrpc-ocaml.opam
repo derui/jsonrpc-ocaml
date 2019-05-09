@@ -19,5 +19,6 @@ depends: [
   "lwt"{>= "4.0.0"}
   "alcotest" { with-test & >= "0.8.4" }
   "alcotest-lwt" { with-test & >= "0.8.0" }
+  "cohttp-lwt-unix" { with-test & >= "2.0.0" }
 ]
 available: ["ocaml" >= "4.05.0"]

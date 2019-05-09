@@ -1,0 +1,9 @@
+(executable
+ (name simple_server)
+ (libraries lwt.unix jsonrpc-ocaml.yojson cohttp cohttp-lwt-unix)
+ (preprocess (pps lwt_ppx)))
+
+(alias
+ (name examples)
+ (deps
+  (glob_files simple_server.exe)))
