@@ -36,4 +36,4 @@ let of_json js =
             Ok {id = Some (Int64.of_string @@ U.to_string id); _method = U.to_string m; params}
         | _ -> Error Invalid_request
       else Error Invalid_request
-  | _ -> Error (Invalid_object js)
+  | _ -> Error Invalid_object

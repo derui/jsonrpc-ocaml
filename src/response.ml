@@ -14,5 +14,5 @@ module type S = sig
   (** [empty] returns empty response that all element are none of.  *)
 
   val to_json : t -> json
-  val of_json : json -> (t, json Types.Parse_error.t) result
+  val of_json : json -> (t, Types.Parse_error.t) result
 end

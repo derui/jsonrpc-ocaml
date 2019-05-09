@@ -40,12 +40,19 @@ module Error_code = struct
 end
 
 module Parse_error = struct
-  type 'a t =
-    | (* The exception thrown when toplevel json is null. *)
-        Empty_json
+  (* The exception thrown when toplevel json is null. *)
+  type t =
+    | Empty_json
     (* Invalid object on parse *)
-    | Invalid_object of 'a
+    | Invalid_object
     | Invalid_request
     | Invalid_response
     | Not_found_version
+
+  let to_string = function
+    | Empty_json -> "empty json"
+    | Invalid_object -> "invalid object"
+    | Invalid_request -> "invalid request"
+    | Invalid_response -> "invalid response"
+    | Not_found_version -> "version not found"
 end

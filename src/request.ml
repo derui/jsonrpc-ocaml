@@ -11,5 +11,5 @@ module type S = sig
     ; id : id option }
 
   val to_json : t -> json
-  val of_json : json -> (t, json Types.Parse_error.t) result
+  val of_json : json -> (t, Types.Parse_error.t) result
 end

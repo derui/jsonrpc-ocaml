@@ -3,7 +3,7 @@ open J.Types
 
 (** Convert exception to jsonrpc-defined error response *)
 let handle_error request data code =
-  Response.{result = None; id = request.Request.id; error = Some Error.{code; data}}
+  Response.{result = None; id = request.Request.id; error = Some Error.(make ?data code)}
 
 module Core = struct
   type json = Yojson.Safe.t

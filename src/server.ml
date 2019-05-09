@@ -16,7 +16,7 @@ module type S = sig
   module Request : Request.S with type json = json
   module Thread : Thread
 
-  type handler = Request.t -> Response.t Thread.t
+  type handler = json option -> json option Thread.t
   type _method = string
 
   val make : unit -> t
