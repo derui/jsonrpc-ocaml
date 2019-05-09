@@ -1,5 +1,5 @@
 open Jsonrpc_ocaml
 
 include Exception.Make (struct
-  type t = Yojson.Safe.json
+  type t = Yojson.Safe.t
 end)

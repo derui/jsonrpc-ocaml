@@ -3,7 +3,6 @@ module type Thread = sig
   type 'a t
 
   val bind : 'a t -> ('a -> 'b t) -> 'b t
-
   val return : 'a -> 'a t
 end
 
@@ -14,9 +13,7 @@ module type S = sig
   type json
 
   module Thread : Thread
-
   module Response : Response.S with type json := json
-
   module Request : Request.S with type json := json
 
   val call : Request.t -> Response.t Thread.t

@@ -3,7 +3,6 @@ module type Thread = sig
   type 'a t
 
   val bind : 'a t -> ('a -> 'b t) -> 'b t
-
   val return : 'a -> 'a t
 end
 
@@ -11,17 +10,13 @@ end
     Rpc module interface. *)
 module type S = sig
   type t
-
   type json
 
   module Response : Response.S with type json = json
-
   module Request : Request.S with type json = json
-
   module Thread : Thread
 
   type handler = Request.t -> Response.t Thread.t
-
   type _method = string
 
   val make : unit -> t
