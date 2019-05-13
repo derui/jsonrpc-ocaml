@@ -18,6 +18,7 @@ let test_set =
         Lwt.return_unit )
   ; Alcotest_lwt.test_case "should return response as error if call method that does not expose"
       `Quick (fun _ () ->
+        let module J = Jsonrpc_ocaml in
         let server = Server.make () in
         let server =
           Server.expose server ~_method:"test" ~handler:(fun _ ->
@@ -29,7 +30,7 @@ let test_set =
         let expected =
           { Response.result = None
           ; id = None
-          ; error = Some Error.(make Types.Error_code.Method_not_found) }
+          ; error = Some Error.(make J.Types.Error_code.Method_not_found) }
         in
         let open Lwt.Infix in
         actual
