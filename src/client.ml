@@ -18,12 +18,41 @@ module type Api_def = sig
   (** convert json to result when request success. *)
 end
 
+(** A module signature for Threading such as Lwt. *)
+module type Thread = sig
+  type 'a t
+
+  val bind : 'a t -> ('a -> 'b t) -> 'b t
+  val return : 'a -> 'a t
+end
+
+(** A module signature to call JSON-RPC. User can create RPC caller with this
+    module.
+*)
+module type Raw = sig
+  type json
+
+  module Thread : Thread
+  module Response : Response.S with type json := json
+  module Request : Request.S with type json := json
+
+  val call : Request.t -> Response.t Thread.t
+  (** [call request] calls remote method via [request]. Notice thread that is returned from this
+      continues after received response or error from server.
+  *)
+
+  val notify : Request.t -> unit Thread.t
+  (** [notify request] send notification to server with [request]. Notice thread that is returned from this
+      continues after finished to send request.
+  *)
+end
+
 (** A module signature to create request for JSON-RPC. Using this module combines with a module implemented
     Rpc module interface. *)
 module type S = sig
   type json
 
-  module Thread : Rpc.Thread
+  module Thread : Thread
   module Error : Error.S with type json = json
 
   val call :
@@ -45,7 +74,7 @@ module type S = sig
   (** Make a notification for API *)
 end
 
-module Make (T : Json_type) (R : Rpc.S with type json = T.t) :
+module Make (T : Json_type) (R : Raw with type json = T.t) :
   S with type json := T.t and module Thread := R.Thread = struct
   type json = T.t
 

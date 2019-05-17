@@ -1,4 +1,4 @@
-open Jsonrpc_ocaml.Types
+open Jsonrpc.Types
 
 type json = Yojson.Safe.t
 
@@ -24,7 +24,7 @@ let to_json t =
 let of_json js =
   match js with
   | `Assoc assoc ->
-      let open Jsonrpc_ocaml.Types.Parse_error in
+      let open Jsonrpc.Types.Parse_error in
       if is_notification assoc || is_request assoc then
         let id = List.assoc_opt "id" assoc
         and _method = List.assoc_opt "method" assoc
@@ -36,4 +36,4 @@ let of_json js =
             Ok {id = Some (Int64.of_string @@ U.to_string id); _method = U.to_string m; params}
         | _ -> Error Invalid_request
       else Error Invalid_request
-  | _ -> Error (Invalid_object js)
+  | _ -> Error Invalid_object

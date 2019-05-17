@@ -1,4 +1,4 @@
-open Jsonrpc_ocaml.Types
+open Jsonrpc.Types
 
 type json = Yojson.Safe.t
 
@@ -46,4 +46,4 @@ let of_json js =
           | Error _ as e -> e )
         | None -> Ok {error = None; id; result}
       else Error Invalid_response
-  | _ -> Error (Invalid_object js)
+  | _ -> Error Invalid_object

@@ -1,3 +1,3 @@
 (library
- (name jsonrpc_ocaml)
+ (name jsonrpc)
  (public_name jsonrpc-ocaml))
