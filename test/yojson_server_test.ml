@@ -1,4 +1,4 @@
-open Jsonrpc_ocaml_yojson
+open Jsonrpc_yojson
 
 let test_set =
   [ Alcotest_lwt.test_case "should be able to expose method with handler" `Quick (fun _ () ->
@@ -15,7 +15,7 @@ let test_set =
         Lwt.return_unit )
   ; Alcotest_lwt.test_case "should return response as error if call method that does not expose"
       `Quick (fun _ () ->
-        let module J = Jsonrpc_ocaml in
+        let module J = Jsonrpc in
         let server = Server.make () in
         let server = Server.expose server ~_method:"test" ~handler:(fun _ -> Lwt.return_none) in
         let actual =

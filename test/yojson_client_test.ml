@@ -1,5 +1,5 @@
-module J = Jsonrpc_ocaml
-module Jo = Jsonrpc_ocaml_yojson
+module J = Jsonrpc
+module Jo = Jsonrpc_yojson
 
 module type Dummy_raw_client = sig
   include

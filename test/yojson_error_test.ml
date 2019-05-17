@@ -1,5 +1,5 @@
-module J = Jsonrpc_ocaml
-module Jo = Jsonrpc_ocaml_yojson
+module J = Jsonrpc
+module Jo = Jsonrpc_yojson
 
 let test_set =
   [ ( "should be able to make an error object from code"

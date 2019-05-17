@@ -1,5 +1,5 @@
-module J = Jsonrpc_ocaml
-open Jsonrpc_ocaml_yojson.Response
+module J = Jsonrpc
+open Jsonrpc_yojson.Response
 
 let test_set =
   [ ( "should be able to parse response object from json"

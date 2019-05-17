@@ -1,4 +1,4 @@
-open Jsonrpc_ocaml.Types
+open Jsonrpc.Types
 
 type json = Yojson.Safe.t
 
@@ -24,7 +24,7 @@ let to_json t =
 let of_json js =
   match js with
   | `Assoc assoc ->
-      let open Jsonrpc_ocaml.Types.Parse_error in
+      let open Jsonrpc.Types.Parse_error in
       if is_notification assoc || is_request assoc then
         let id = List.assoc_opt "id" assoc
         and _method = List.assoc_opt "method" assoc

@@ -1,4 +1,4 @@
-module J = Jsonrpc_ocaml
+module J = Jsonrpc
 
 module type Api_def = sig
   include J.Client.Api_def with type json = Yojson.Safe.t

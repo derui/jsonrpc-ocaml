@@ -1,4 +1,4 @@
-module J = Jsonrpc_ocaml
+module J = Jsonrpc
 module B = Yojson.Safe
 
 (** The type of error object *)
@@ -9,7 +9,7 @@ include J.Error.Make_base (struct
 end)
 
 let to_json error =
-  let module T = Jsonrpc_ocaml.Types in
+  let module T = Jsonrpc.Types in
   let code = ("code", `Int error.code) in
   let message = ("message", `String error.message) in
   let data = match error.data with Some data -> [("data", data)] | None -> [] in

@@ -1,4 +1,4 @@
-module J = Jsonrpc_ocaml
+module J = Jsonrpc
 open J.Types
 
 (** Convert exception to jsonrpc-defined error response *)

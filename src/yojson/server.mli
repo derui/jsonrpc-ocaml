@@ -1,7 +1,7 @@
 (** Define response module for Yojson *)
 
 include
-  Jsonrpc_ocaml.Server.S
+  Jsonrpc.Server.S
   with type json = Yojson.Safe.t
   with module Request = Request
    and module Response = Response

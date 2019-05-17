@@ -1,4 +1,4 @@
-open Jsonrpc_ocaml.Types
+open Jsonrpc.Types
 
 type json = Yojson.Safe.t
 
