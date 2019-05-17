@@ -10,9 +10,10 @@ module Core = struct
 
   module Response = Response
   module Request = Request
+  module Error = Error
   module Thread = Lwt
 
-  type handler = json option -> json option Lwt.t
+  type handler = json option -> (json option, Error.t) result Lwt.t
   type _method = string
   type t = {procedure_table : (_method, handler) Hashtbl.t}
 
@@ -31,10 +32,12 @@ module Core = struct
       (fun () ->
         match Hashtbl.find_opt t.procedure_table request.Request._method with
         | None -> Exception.raise_error Error_code.Method_not_found
-        | Some handler ->
+        | Some handler -> (
             let open Lwt in
             handler request.params
-            >>= fun result -> return {Response.empty with id = request.id; result} )
+            >>= function
+            | Ok result -> return {Response.empty with id = request.id; result}
+            | Error e -> return {Response.empty with id = request.id; error = Some e} ) )
       (function
         | Exception.Jsonrpc_error (code, data) -> Lwt.return @@ handle_error request data code
         | _ as e -> raise e )
