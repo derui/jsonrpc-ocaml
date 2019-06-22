@@ -75,9 +75,10 @@ module type S = sig
 end
 
 module Make (T : Json_type) (R : Raw with type json = T.t) :
-  S with type json := T.t and module Thread := R.Thread = struct
+  S with type json = T.t and module Thread = R.Thread = struct
   type json = T.t
 
+  module Thread = R.Thread
   module Error = R.Response.Error
 
   (** Make a request and response handler that will use with response which has same id of the request it. *)
