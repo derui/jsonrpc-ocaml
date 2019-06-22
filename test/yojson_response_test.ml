@@ -1,5 +1,6 @@
 module J = Jsonrpc
-open Jsonrpc_yojson.Response
+module Jy = Jsonrpc_yojson
+open Jy.Response
 
 let test_set =
   [ ( "should be able to parse response object from json"
@@ -20,7 +21,7 @@ let test_set =
 |}
         in
         let expected =
-          {id = Some 1L; result = None; error = Some Error.(make J.Types.Error_code.Parse_error)}
+          {id = Some 1L; result = None; error = Some Jy.Error.(make J.Types.Error_code.Parse_error)}
         in
         let actual = of_json @@ Yojson.Safe.from_string json in
         Alcotest.(check @@ of_pp Fmt.nop) "expected" actual @@ Ok expected )
@@ -34,7 +35,7 @@ let test_set =
         in
         let expected =
           { id = Some 1L
-          ; error = Some Error.(make ~data:(`String "detail") J.Types.Error_code.Parse_error)
+          ; error = Some Jy.Error.(make ~data:(`String "detail") J.Types.Error_code.Parse_error)
           ; result = None }
         in
         let actual = of_json @@ Yojson.Safe.from_string json in

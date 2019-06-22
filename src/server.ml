@@ -1,11 +1,3 @@
-(** A module signature for Threading such as Lwt. *)
-module type Thread = sig
-  type 'a t
-
-  val bind : 'a t -> ('a -> 'b t) -> 'b t
-  val return : 'a -> 'a t
-end
-
 (** A module signature to create procedure for JSON-RPC. Using this module combines with a module implemented
     Rpc module interface. *)
 module type S = sig
@@ -15,7 +7,7 @@ module type S = sig
   module Response : Response.S with type json = json
   module Request : Request.S with type json = json
   module Error : Error.S with type json = json
-  module Thread : Thread
+  module Thread : Types.Thread
 
   type handler = json option -> (json option, Error.t) result Thread.t
   type _method = string

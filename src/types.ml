@@ -1,5 +1,13 @@
 type id = int64
 
+(** A module signature for Threading such as Lwt. *)
+module type Thread = sig
+  type 'a t
+
+  val bind : 'a t -> ('a -> 'b t) -> 'b t
+  val return : 'a -> 'a t
+end
+
 (** Type type of error code defined by specification of JSON RPC *)
 module Error_code = struct
   type t =

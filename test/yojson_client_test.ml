@@ -1,13 +1,9 @@
 module J = Jsonrpc
 module Jo = Jsonrpc_yojson
+module Jyc = Jo.Client.Make (Lwt)
 
 module type Dummy_raw_client = sig
-  include
-    J.Client.Raw
-    with type json = Yojson.Safe.t
-     and module Request = Jo.Request
-     and module Response = Jo.Response
-     and module Thread = Lwt
+  include Jyc.S
 
   val requests : Jo.Request.t list ref
 end
@@ -16,17 +12,15 @@ let dummy_raw_client () =
   ( module struct
     type json = Yojson.Safe.t
 
-    module Thread = Lwt
-    module Request = Jo.Request
-    module Response = Jo.Response
-
     let requests = ref []
 
-    let call r =
+    let call ~api ?params () =
+      let r = Jyc.Helper.setup_request ~api ~params in
       requests := r :: !requests ;
-      Lwt.return Jo.Response.{result = None; id = r.Request.id; error = None}
+      Lwt.return_ok None
 
-    let notify r =
+    let notify ~api ?params () =
+      let r = Jyc.Helper.setup_request ~api ~params in
       requests := r :: !requests ;
       Lwt.return_unit
   end
@@ -35,18 +29,15 @@ let dummy_raw_client () =
 let test_set =
   [ Alcotest_lwt.test_case "should be able to wrap a request with API definition" `Quick
       (fun _ () ->
-        let module A = struct
-          type json = Yojson.Safe.t
-          type params = int list
-          type result = int
-
-          let name = "sum"
-          let params_to_json v = `List (List.map (fun v -> `Int v) v)
-          let result_of_json = function `Int v -> v | _ -> failwith ""
-        end in
         let module R = (val dummy_raw_client ()) in
-        let module C = Jo.Client.Make (R) in
-        let%lwt _ = C.call ~api:(module A) ~params:[1; 2; 3] () in
+        let%lwt _ =
+          R.call
+            ~api:
+              { Jyc._method = "sum"
+              ; params_to_json = (fun v -> `List (List.map (fun v -> `Int v) v))
+              ; result_of_json = (function `Int v -> v | _ -> failwith "") }
+            ~params:[1; 2; 3] ()
+        in
         let req = List.hd !R.requests in
         let expected =
           Jo.Request.
@@ -58,18 +49,15 @@ let test_set =
         Lwt.return_unit )
   ; Alcotest_lwt.test_case "should be able to wrap a notification with API definition" `Quick
       (fun _ () ->
-        let module B = struct
-          type json = Yojson.Safe.t
-          type params = int list
-          type result = int
-
-          let name = "sum"
-          let params_to_json v = `List (List.map (fun v -> `Int v) v)
-          let result_of_json = function `Int v -> v | _ -> failwith ""
-        end in
         let module R = (val dummy_raw_client ()) in
-        let module C = Jo.Client.Make (R) in
-        let%lwt () = C.notify ~api:(module B) ~params:[1; 2; 3] () in
+        let%lwt () =
+          R.notify
+            ~api:
+              { Jyc._method = "sum"
+              ; params_to_json = (fun v -> `List (List.map (fun v -> `Int v) v))
+              ; result_of_json = (function `Int v -> v | _ -> failwith "") }
+            ~params:[1; 2; 3] ()
+        in
         let req = List.hd !R.requests in
         let expected =
           Jo.Request.{id = None; params = Some (`List [`Int 1; `Int 2; `Int 3]); _method = "sum"}
