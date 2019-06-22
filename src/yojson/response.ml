@@ -1,15 +1,14 @@
 open Jsonrpc.Types
 
 type json = Yojson.Safe.t
-
-module Error = Error
+type error = Error.t
 
 let jsonrpc_version = ("jsonrpc", `String "2.0")
 
 type t =
   { result : json option
   ; id : id option
-  ; error : Error.t option }
+  ; error : error option }
 
 let empty = {result = None; id = None; error = None}
 

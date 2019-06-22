@@ -1,9 +1,9 @@
-module Y = Jsonrpc_ocaml_yojson
+module Y = Jsonrpc_yojson
 
 let jsonrpc_server =
   let server = Y.Server.make () in
   Y.Server.expose ~_method:"sample"
-    ~handler:(fun req -> Lwt.return Y.Response.{empty with id = req.id})
+    ~handler:(function None -> Lwt.return_ok None | Some req -> Lwt.return_ok @@ Some req)
     server
 
 let handler _ (req : Cohttp_lwt_unix.Request.t) (body : Cohttp_lwt.Body.t) =

@@ -2,13 +2,13 @@ module type S = sig
   (** Abstract type for json *)
   type json
 
-  module Error : Error.S with type json = json
+  type error
 
   (** The module handle response object *)
   type t =
     { result : json option
     ; id : Types.id option
-    ; error : Error.t option }
+    ; error : error option }
 
   val empty : t
   (** [empty] returns empty response that all element are none of.  *)
