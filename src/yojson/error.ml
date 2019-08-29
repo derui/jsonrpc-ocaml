@@ -1,8 +1,8 @@
 module J = Jsonrpc
 module B = Yojson.Safe
 
-(** The type of error object *)
 type json = Yojson.Safe.t
+(** The type of error object *)
 
 include J.Error.Make_base (struct
   type t = json

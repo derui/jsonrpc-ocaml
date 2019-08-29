@@ -37,7 +37,7 @@ module Error_code = struct
     | Server_error v -> v
     | Application_error (_, v) -> v
 
-  let to_message = function
+  let to_string = function
     | Parse_error -> "Parse error"
     | Invalid_request -> "Invalid Request"
     | Method_not_found -> "Method not found"
