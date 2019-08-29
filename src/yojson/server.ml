@@ -2,8 +2,8 @@ module J = Jsonrpc
 open J.Types
 
 (** Convert exception to jsonrpc-defined error response *)
-let handle_error request data code =
-  Response.{result = None; id = request.Request.id; error = Some Error.(make ?data code)}
+let handle_error request error =
+  Response.{result = None; id = request.Request.id; error = Some error}
 
 module Core = struct
   type json = Yojson.Safe.t
@@ -31,16 +31,15 @@ module Core = struct
     Lwt.catch
       (fun () ->
         match Hashtbl.find_opt t.procedure_table request.Request._method with
-        | None -> Exception.raise_error Error_code.Method_not_found
+        | None -> raise Error.(Jsonrpc_error (make Error_code.Method_not_found))
         | Some handler -> (
             let open Lwt in
             handler request.params
             >>= function
             | Ok result -> return {Response.empty with id = request.id; result}
-            | Error e -> return {Response.empty with id = request.id; error = Some e} ) )
+            | Error e -> return {Response.empty with id = request.id; error = Some e} ))
       (function
-        | Exception.Jsonrpc_error (code, data) -> Lwt.return @@ handle_error request data code
-        | _ as e -> raise e )
+        | Error.Jsonrpc_error error -> Lwt.return @@ handle_error request error | _ as e -> raise e)
 end
 
 include Core
