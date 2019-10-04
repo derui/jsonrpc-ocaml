@@ -1,6 +1,6 @@
 
 opam-version: "2.0"
-version: "0.6.0"
+version: "0.6.1"
 maintainer: "derutakayu@gmail.com"
 authors: "derui"
 license: "MIT"
@@ -16,7 +16,7 @@ build: [
 depends: [
   "dune" {build & >= "1.0.0"}
   "yojson" { >= "1.6.0" }
-  "lwt"{ with-test & >= "4.0.0"}
+  "lwt"{ >= "4.0.0"}
   "alcotest" { with-test & >= "0.8.4" }
   "alcotest-lwt" { with-test & >= "0.8.0" }
   "cohttp-lwt-unix" { with-test & >= "2.0.0" }
