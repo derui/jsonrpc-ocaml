@@ -1,4 +1,5 @@
 (library
  (name jsonrpc_yojson)
  (public_name jsonrpc-ocaml.yojson)
- (libraries jsonrpc-ocaml yojson lwt))
+ (libraries jsonrpc-ocaml yojson lwt)
+ (preprocess (pps lwt_ppx )))

@@ -3,6 +3,7 @@
 module type S = sig
   type t
   type json
+  type data
 
   module Response : Response.S with type json = json
   module Request : Request.S with type json = json
@@ -21,7 +22,7 @@ module type S = sig
   val unexpose : _method:string -> t -> t
   (** Unexpose API bound specified [_method] *)
 
-  val handle_request : request:Request.t -> t -> Response.t Thread.t
+  val handle_request : request:data -> t -> data Thread.t
   (** Handle [request] with server instance [t].
       This function will raise [jsonrpc_error] if can not handle request,
       not found method, or something else.
